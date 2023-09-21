@@ -28,7 +28,13 @@ export default {
     colors: {
       type: Array,
       default: () => [],
-      tip: "Array of colors for the bar chart",
+      tip: "Array of colors for the bar chart, names or #rrggbb",
+    },
+    // Additional customization options for the bar chart
+    barChartOptions: {
+      type: Object,
+      default: () => ({}),
+      tip: "Additional customization options for the bar chart (Chart.js options)",
     },
   },
 
@@ -49,24 +55,28 @@ export default {
         }],
       };
 
-      const barChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            type: 'category', // Specify the x-axis type as category if needed
-          },
-          y: {
-            beginAtZero: true, // Customize y-axis options as needed
+      // Merge additional customization options with default options
+      const mergedOptions = Object.assign(
+        {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: 'category', // Specify the x-axis type as category if needed
+            },
+            y: {
+              beginAtZero: true, // Customize y-axis options as needed
+            },
           },
         },
-      };
+        this.barChartOptions // Customization options provided through props
+      );
 
-      // Create the bar chart using Chart.js
+      // Create the bar chart using Chart.js with merged options
       new Chart(ctx, {
         type: 'bar',
         data: barChartData,
-        options: barChartOptions,
+        options: mergedOptions,
       });
     },
   },
